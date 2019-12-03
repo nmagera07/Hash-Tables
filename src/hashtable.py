@@ -51,7 +51,28 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        # hash the key, first
+        index = self._hash_mod(key)
+
+        # Check if key is there, if not, set value
+
+        # if self.storage[index] is not None:
+        #     print(f"WARNING: Overwriting data at {index}")
+
+        # self.storage[index] = LinkedPair(key, value)
+
+        node = self.storage[index]
+        pair = LinkedPair(key, value)
+
+        while node is not None and self.storage[index].key is not key:
+            insert_node = node
+            node = insert_node.next_node
+
+        if node is not None:
+            node.value = value
+        else:
+            pair.next = self. storage[index]
+            self.storage[index] = pair
 
 
 
@@ -63,7 +84,29 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        index = self._hash_mod(key)
+
+        # if self.storage[index] is None:
+        #     print(f"WARNING: Key not found")
+        #     return
+
+        # self.storage[index] = None
+
+        node = self.storage[index]
+        next_node = None
+
+        while node is not None and node.key != key:
+            next_node = node
+            node = next_node.next
+
+        if node is None:
+            print("does not exist")
+
+        else:
+            if next_node is None:
+                self.storage[index] = node
+            else:
+                next_node.next = node.next
 
 
     def retrieve(self, key):
@@ -74,8 +117,15 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
-
+        index = self._hash_mod(key)
+        if self.storage[index] is not None:
+            if self.storage[index].key == key:
+                return self.storage[index].value
+            else:
+                print(f"WARNING: Key doesn't match!")
+                return None
+        else:
+            return None
 
     def resize(self):
         '''
@@ -84,7 +134,20 @@ class HashTable:
 
         Fill this in.
         '''
-        pass
+        self.capacity += 2
+        new_storage = [None] * self.capacity
+
+        # for i in range(self.count):
+        #     new_storage[i] = self.storage[i]
+
+        for bucket_item in self.storage:
+            if bucket_item is not None:
+                new_index = self._hash_mod(bucket_item.key)
+                new_storage[new_index] = LinkedPair(bucket_item.key, bucket_item.value)
+
+        self.storage = new_storage
+
+        
 
 
 
